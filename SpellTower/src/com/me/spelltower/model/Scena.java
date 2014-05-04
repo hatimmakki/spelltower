@@ -65,9 +65,13 @@ public class Scena extends Stage {
 		cuvant.delete(0, cuvant.length());
 		eCuvant = false;
 		return handled;
+	}
+	
+	private void updateScene(){
+		
+	}
 
-
-		/*@Override
+	/*@Override
 	public boolean touchDragged (int screenX, int screenY, int pointer) {
 		boolean handled = super.touchDragged(screenX, screenY, pointer);
 
@@ -96,5 +100,5 @@ public class Scena extends Stage {
 		//System.out.println("DRAGGED");
 		return handled;
 	} */
-	}
+
 }

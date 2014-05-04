@@ -26,7 +26,7 @@ public class GameScreen implements Screen{
 	private SpriteBatch batch;
 	private ArrayList<String> alfabetGenerat;
 	private FPSLogger logger;
-	private Litera matriceLitere[][];
+	public Litera matriceLitere[][];
 
 	@Override
 	public void render (float delta) {
