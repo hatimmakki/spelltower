@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="libs/gdx.jar" sourcepath="libs/gdx-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/me/Desktop/Libraries/jackson-annotations-2.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/me/Desktop/Libraries/jackson-core-2.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/me/Desktop/Libraries/jackson-databind-2.2.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
