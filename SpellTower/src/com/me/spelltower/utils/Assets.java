@@ -41,7 +41,9 @@ public class Assets {
 		mapper = new ObjectMapper();
 
 		//genereaza matricea de litere
-		
+		matriceLitere = new Litera[11][7];
+		genereazaAlfabet();
+		genereazaMatricea();
 
 		InputStream stream = null;
 
@@ -88,7 +90,6 @@ public class Assets {
 
 			int index = Arrays.binarySearch(frecventaCumulativa, rand);
 
-			System.out.println(index);
 			alfabetGenerat.add(SpellTowerGame.alfabet[Math.abs(index)-1]);
 
 			Collections.shuffle(alfabetGenerat);
@@ -96,21 +97,25 @@ public class Assets {
 	}
 
 	private void genereazaMatricea(){
-
+		
 		int indexAlfabet = 0;
 		int pozCol = 2;
-
-		for(int i = 0; i<11; i++){
-
+		
+		for(int i = 10; i>= 0; i--){
+			
 			int pozLinie = 2;
-
-			for(int j = 0; j<7; j++){
-				Litera t = new Litera(alfabetGenerat.get(indexAlfabet), pozLinie, pozCol);
+			
+			for(int j = 0; j <7; j++){
+				Litera t = new Litera(alfabetGenerat.get(indexAlfabet), pozLinie, pozCol, i, j);
 				matriceLitere[i][j] = t;
 				pozLinie += 67;
 				indexAlfabet++;
 			}
 			pozCol += 67;
 		}
+	}
+	
+	public Litera[][] getMatriceLitere () {
+		return matriceLitere;
 	}
 }

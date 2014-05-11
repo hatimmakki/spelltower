@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.me.spelltower.model.Litera;
 import com.me.spelltower.model.Scena;
 import com.me.spelltower.model.SpellTowerGame;
+import com.me.spelltower.utils.Assets;
 
 public class GameScreen implements Screen{
 
@@ -24,9 +25,9 @@ public class GameScreen implements Screen{
 	private Scena stage;
 	private BitmapFont font;
 	private SpriteBatch batch;
-	private ArrayList<String> alfabetGenerat;
 	private FPSLogger logger;
 	public Litera matriceLitere[][];
+	
 
 	@Override
 	public void render (float delta) {
@@ -51,7 +52,7 @@ public class GameScreen implements Screen{
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		stage = new Scena();
-		matriceLitere = new Litera[11][7];
+		matriceLitere = Assets.getInstance().getMatriceLitere();
 
 		camera = new OrthographicCamera();
 		camera.position.set(480/2, 800/2, 0);
@@ -61,11 +62,8 @@ public class GameScreen implements Screen{
 		viewPort.setCamera(camera);
 		stage.setViewport(viewPort);
 
-		genereazaAlfabet();
-		genereazaMatricea();
-
-		for(int i = 0; i<11; i++){
-			for(int j = 0; j<7; j++){
+		for(int i =10; i>=0; i--){
+			for(int j = 0; j <7; j++){
 				stage.addActor(matriceLitere[i][j]);
 			}
 		}
@@ -93,42 +91,4 @@ public class GameScreen implements Screen{
 	@Override
 	public void dispose () {
 	}
-
-	private void genereazaAlfabet(){
-		alfabetGenerat = new ArrayList<String>();
-		int[] frecventaCumulativa = SpellTowerGame.frecventaCumulativa;
-
-
-		for(int i = 0; i<77;i++){
-			int rand = new Random().nextInt(647897);
-
-			int index = Arrays.binarySearch(frecventaCumulativa, rand);
-
-			System.out.println(index);
-			alfabetGenerat.add(SpellTowerGame.alfabet[Math.abs(index)-1]);
-
-			Collections.shuffle(alfabetGenerat);
-		}
-	}
-
-	private void genereazaMatricea(){
-
-		int indexAlfabet = 0;
-		int pozCol = 2;
-		
-		for(int i = 0; i<11; i++){
-			
-			int pozLinie = 2;
-			
-			for(int j = 0; j<7; j++){
-				Litera t = new Litera(alfabetGenerat.get(indexAlfabet), pozLinie, pozCol);
-				matriceLitere[i][j] = t;
-				pozLinie += 67;
-				indexAlfabet++;
-			}
-			pozCol += 67;
-		}
-	}
-
-
 }

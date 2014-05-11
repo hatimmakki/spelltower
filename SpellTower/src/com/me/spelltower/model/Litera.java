@@ -6,7 +6,6 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.me.spelltower.utils.Assets;
 
@@ -15,27 +14,71 @@ public class Litera extends Actor{
 	private TextureRegion textura;
 	private TextureRegion[] textures;
 	private final int WIDTH = 64, HEIGHT = 64;
-	private float x, y;
+	private Color currentColor;
+	private int linie;
 
-	private Color currentColor = null;
-	public boolean touchUpOccured = false;
+	public Litera(String litera, float x, float y, int linie, int coloana){
 
-	public Litera(String litera, float x, float y){
 		this.litera = litera;
 		textures = Assets.getInstance().getRegions(litera);
 		textura = textures[0];
 		currentColor = Color.Blue;
-		this.x = x;
-		this.y = y;
 		setTouchable(Touchable.enabled);
 		setBounds(x, y, 50, 50);
 	}
 
+	@Override
+	public Actor hit (float x, float y, boolean touchable) {
+		Litera actor = (Litera)super.hit(x, y, touchable);
 
-	public void draw(Batch batch, float parentAlpha) {
-		batch.draw(textura, x, y, WIDTH, HEIGHT);
+		if(actor != null){
+			Scena scena = (Scena)getStage();
+
+			actor.setTouchable(Touchable.disabled);
+
+			//Adaugam litera 
+			scena.cuvant.append(this.litera);
+
+			//Schimbam culoarea
+			actor.setColour(Litera.Color.Yellow);
+
+			Scena.stivaActori.push(actor);
+
+			Iterator iter = scena.stivaActori.iterator();
+
+			//verificam daca e cuvant
+			if(Assets.getInstance().eCuvant(scena.cuvant.toString())){
+
+				//In caz pozitiv, schimbam culoarea tuturor literelor cuvantului
+				scena.eCuvant = true;
+				while(iter.hasNext()){
+					Litera temp = (Litera)iter.next();
+					temp.setColour(Color.Green);
+					temp.setTouchable(Touchable.disabled);
+				}
+			}
+			else{
+				scena.eCuvant = false;
+
+				while(iter.hasNext()){
+					((Litera)(iter.next())).setColour(Litera.Color.Yellow);
+				}
+			}
+		}
+		return actor;
+	}
+	public int getLinie () {
+		return linie;
 	}
 
+	public void setLinie (int linie) {
+		setY(calculeazaY(linie));
+	}
+
+	public void draw(Batch batch, float parentAlpha) {
+		batch.draw(textura, getX(), getY(), WIDTH, HEIGHT);
+		
+	}
 
 	public static enum Color{
 		Blue, Yellow, Green;
@@ -63,42 +106,13 @@ public class Litera extends Actor{
 		return litera;
 	}
 
-	@Override
-	public Actor hit (float x, float y, boolean touchable) {
-		Litera actor = (Litera)super.hit(x, y, touchable);
-
-		if(actor != null){
-			Scena scena = (Scena)getStage();
-
-			actor.setTouchable(Touchable.disabled);
-
-			//Adaugam litera 
-			scena.cuvant.append(this.litera);
-
-			//Schimbam culoarea
-			actor.setColour(Litera.Color.Yellow);
-
-			scena.stivaActori.push(actor);
-
-			//verificam daca e cuvant
-			if(Assets.getInstance().eCuvant(scena.cuvant.toString())){
-
-				//In caz pozitiv, schimbam culoarea tuturor literelor cuvantului
-				scena.eCuvant = true;
-				Iterator iter = scena.stivaActori.iterator();
-				while(iter.hasNext()){
-					((Litera)(iter.next())).setColour(Litera.Color.Green);
-				}
-			}
-			else{
-				scena.eCuvant = false;
-				Iterator iter = scena.stivaActori.iterator();
-				while(iter.hasNext()){
-					((Litera)(iter.next())).setColour(Litera.Color.Yellow);
-				}
-			}
+	private float calculeazaY(int pozitie){
+		if(pozitie == 10){
+			return 2f;
 		}
-		return actor;
+		else{
+			return ((10 - pozitie) * 67) +2;
+		}
 	}
 
 	@Override
