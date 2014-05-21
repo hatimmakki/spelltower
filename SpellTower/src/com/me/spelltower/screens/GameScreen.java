@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.me.spelltower.model.BitmapFont_XY;
 import com.me.spelltower.model.Litera;
@@ -25,35 +28,45 @@ public class GameScreen implements Screen{
 	private static BitmapFont_XY tweenFont;
 	private FPSLogger logger;
 	private static TweenManager manager;
-	public Litera matriceLitere[][];
+	private  Litera matriceLitere[][];
 	public static boolean drawTween = false;
-	
+	private ShapeRenderer shapeRend;
+
 	private StringBuilder number = new StringBuilder("");
-	
+
 	@Override
 	public void render (float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		logger.log();
-		
+
+
 		stage.draw();
 		stage.act();
-		
+
 		batch.begin();
-		font.draw(batch, stage.cuvant.toString().toUpperCase() , 15, 790); 
 		
+		font.draw(batch, stage.cuvant.toString().toUpperCase() , 15, 790); 
+
 		if(stage.eCuvant()){
 			font.setColor(Color.GREEN);
 		}
-		
+
 		if(drawTween){
 			tweenFont.draw(batch, "+67", tweenFont.getX(), tweenFont.getY());
 		}
-	
+		
 		manager.update(delta);
 		
 		batch.end();
+		
+		//draw the line
+		shapeRend.begin(ShapeType.Line);
+		shapeRend.setColor(Color.ORANGE);
+		shapeRend.line(0, 745, 480, 745);
+		shapeRend.end();
+		
 	}
 
 	@Override
@@ -61,12 +74,14 @@ public class GameScreen implements Screen{
 
 		logger = new FPSLogger();
 		batch = new SpriteBatch();
+
+
 		font = Assets.getInstance().getFont();
 		tweenFont = Assets.getInstance().getFont();
 		tweenFont.setColor(Color.GREEN);
 		tweenFont.setX(300);
 		tweenFont.setY(780);
-		
+
 		manager = new TweenManager();
 		stage = new Scena(this);
 		matriceLitere = Assets.getInstance().getMatriceLitere();
@@ -74,6 +89,9 @@ public class GameScreen implements Screen{
 		camera = new OrthographicCamera();
 		camera.position.set(480/2, 800/2, 0);
 		camera.update();
+
+		shapeRend = new ShapeRenderer();
+		//shapeRend.setProjectionMatrix(camera.combined);
 
 		viewPort = new StretchViewport(480, 800);
 		viewPort.setCamera(camera);
@@ -91,15 +109,15 @@ public class GameScreen implements Screen{
 	public void resize (int width, int height) {
 		stage.getViewport().update(width, height, false);
 	}
-	
+
 	public void setWhiteFontColor(){
 		font.setColor(Color.WHITE);
 	}
-	
+
 	public BitmapFont_XY getFont(){
 		return font;
 	}
-	
+
 	public static TweenManager getTweenManager(){
 		return manager;
 	}
