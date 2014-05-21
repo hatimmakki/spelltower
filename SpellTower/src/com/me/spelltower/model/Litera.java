@@ -6,7 +6,6 @@ import java.util.Random;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import aurelienribon.tweenengine.equations.Bounce;
-import aurelienribon.tweenengine.equations.Elastic;
 
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -22,6 +21,11 @@ public class Litera extends Actor{
 	private final int WIDTH = 64, HEIGHT = 64;
 	private Color currentColor;
 	private TweenManager manager;
+	private Scena stage;
+
+
+	int temp = 0;
+
 	public Litera(String litera, float x, float y, int linie, int coloana){
 
 		this.litera = litera;
@@ -30,40 +34,61 @@ public class Litera extends Actor{
 		textura.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		currentColor = Color.Blue;
 		manager = new TweenManager();
+		stage = (Scena)getStage();
+
+
 		setTouchable(Touchable.enabled);
 		setBounds(x, y, 50, 50);
 	}
-	
+
+
+
 	public void draw(Batch batch, float parentAlpha) {
 		batch.draw(textura, getX(), getY(), WIDTH, HEIGHT);
-		
 		manager.update(parentAlpha);
 	}
 
 	@Override
 	public Actor hit (float x, float y, boolean touchable) {
 		Litera actor = (Litera)super.hit(x, y, touchable);
+		
+		stage = (Scena)getStage();
 
-		if(actor != null){
-			Scena scena = (Scena)getStage();
+		if(actor == this)
+			System.out.println("ACTOR HIT LITERA " + litera +"   "+ temp++ );
+
+		if(actor != null && actor == this){
+
+
+			System.out.println(Math.abs((actor.getX() - stage.getLastHitActorX())));
+			System.out.println(Math.abs((actor.getY() - stage.getLastHitActorY())));
+
+			if(stage.getLastHitActorX() != -1){
+				if( (Math.abs((actor.getX() - stage.getLastHitActorX())) > 134) || (Math.abs((actor.getY() - stage.getLastHitActorY())) > 134) ){
+					return null;
+				}
+			}
+
+			stage.setLastHitActorCoord((int)actor.getX(), (int)actor.getY());
+			
 
 			actor.setTouchable(Touchable.disabled);
 
 			//Adaugam litera 
-			scena.cuvant.append(this.litera);
+			stage.AppendToWord(this.litera);
 
 			//Schimbam culoarea
 			actor.setColour(Litera.Color.Yellow);
 
-			Scena.stivaActori.push(actor);
+			stage.pushActor(actor);
 
-			Iterator iter = scena.stivaActori.iterator();
+			Iterator iter = stage.getStivaActori().iterator();
 
 			//verificam daca e cuvant
-			if(Assets.getInstance().eCuvant(scena.cuvant.toString())){
+			if(Assets.getInstance().eCuvant(stage.getCuvant())){
 
 				//In caz pozitiv, schimbam culoarea tuturor literelor cuvantului
-				scena.setCuvant(true);
+				stage.setCuvant(true);
 				while(iter.hasNext()){
 					Litera temp = (Litera)iter.next();
 					temp.setColour(Color.Green);
@@ -71,7 +96,7 @@ public class Litera extends Actor{
 				}
 			}
 			else{
-				scena.setCuvant(false);;
+				stage.setCuvant(false);;
 
 				while(iter.hasNext()){
 					((Litera)(iter.next())).setColour(Litera.Color.Yellow);
@@ -80,15 +105,14 @@ public class Litera extends Actor{
 		}
 		return actor;
 	}
-	
+
 	public void setLinie (int linie) {
-		
+
 		Tween.to(this, LiteraAccessor.POSITION_Y, 80f)
 		.target(calculeazaY(linie))
 		.ease(Bounce.OUT)
 		.start(manager);
 	}
-
 
 	public static enum Color{
 		Blue, Yellow, Green;
@@ -123,6 +147,10 @@ public class Litera extends Actor{
 		else{
 			return ((10 - pozitie) * 67) +2;
 		}
+	}
+	
+	public void resetLastHitActor(){
+		 
 	}
 
 	@Override

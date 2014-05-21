@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.me.spelltower.model.BitmapFont_XY;
 import com.me.spelltower.model.Litera;
@@ -29,8 +28,8 @@ public class GameScreen implements Screen{
 	private FPSLogger logger;
 	private static TweenManager manager;
 	private  Litera matriceLitere[][];
-	public static boolean drawTween = false;
 	private ShapeRenderer shapeRend;
+	public static boolean drawTween = false;
 
 	private StringBuilder number = new StringBuilder("");
 
@@ -39,15 +38,14 @@ public class GameScreen implements Screen{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		logger.log();
-
+		//logger.log();
 
 		stage.draw();
 		stage.act();
 
 		batch.begin();
 		
-		font.draw(batch, stage.cuvant.toString().toUpperCase() , 15, 790); 
+		font.draw(batch, stage.getCuvant().toUpperCase() , 15, 790); 
 
 		if(stage.eCuvant()){
 			font.setColor(Color.GREEN);
@@ -102,6 +100,7 @@ public class GameScreen implements Screen{
 				stage.addActor(matriceLitere[i][j]);
 			}
 		}
+		
 		Gdx.input.setInputProcessor(stage);
 	}
 
