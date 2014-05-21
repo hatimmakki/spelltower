@@ -54,14 +54,14 @@ public class Litera extends Actor{
 		
 		stage = (Scena)getStage();
 
-		if(actor == this)
-			System.out.println("ACTOR HIT LITERA " + litera +"   "+ temp++ );
+/*		if(actor == this)
+			System.out.println("ACTOR HIT LITERA " + litera +"   "+ temp++ );*/
 
 		if(actor != null && actor == this){
 
 
-			System.out.println(Math.abs((actor.getX() - stage.getLastHitActorX())));
-			System.out.println(Math.abs((actor.getY() - stage.getLastHitActorY())));
+		/*	System.out.println(Math.abs((actor.getX() - stage.getLastHitActorX())));
+			System.out.println(Math.abs((actor.getY() - stage.getLastHitActorY())));*/
 
 			if(stage.getLastHitActorX() != -1){
 				if( (Math.abs((actor.getX() - stage.getLastHitActorX())) > 134) || (Math.abs((actor.getY() - stage.getLastHitActorY())) > 134) ){

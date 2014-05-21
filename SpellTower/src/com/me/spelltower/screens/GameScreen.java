@@ -29,7 +29,11 @@ public class GameScreen implements Screen{
 	private static TweenManager manager;
 	private  Litera matriceLitere[][];
 	private ShapeRenderer shapeRend;
+	
 	public static boolean drawTween = false;
+	private int points;
+	private int totalPoints = 0;
+	private String totalPointsStr = "0";
 
 	private StringBuilder number = new StringBuilder("");
 
@@ -38,7 +42,7 @@ public class GameScreen implements Screen{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		//logger.log();
+		logger.log();
 
 		stage.draw();
 		stage.act();
@@ -46,13 +50,14 @@ public class GameScreen implements Screen{
 		batch.begin();
 		
 		font.draw(batch, stage.getCuvant().toUpperCase() , 15, 790); 
+		font.draw(batch, totalPointsStr, 420, 790); 
 
 		if(stage.eCuvant()){
 			font.setColor(Color.GREEN);
 		}
 
 		if(drawTween){
-			tweenFont.draw(batch, "+67", tweenFont.getX(), tweenFont.getY());
+			tweenFont.draw(batch, "+" + points, tweenFont.getX(), tweenFont.getY());
 		}
 		
 		manager.update(delta);
@@ -89,7 +94,6 @@ public class GameScreen implements Screen{
 		camera.update();
 
 		shapeRend = new ShapeRenderer();
-		//shapeRend.setProjectionMatrix(camera.combined);
 
 		viewPort = new StretchViewport(480, 800);
 		viewPort.setCamera(camera);
@@ -126,6 +130,12 @@ public class GameScreen implements Screen{
 	}
 	public BitmapFont_XY getTweenFont(){
 		return tweenFont;
+	}
+	
+	public void setPoints(int points){
+		this.points = points;
+		totalPoints += points;
+		totalPointsStr = totalPoints + "";
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import com.me.spelltower.utils.Tweens;
 public class Scena extends Stage implements InputProcessor{
 
 	private StringBuilder cuvant;
+	private int points;
 	private boolean eCuvant = false;
 	private GameScreen gameScreen;
 	
@@ -60,6 +61,9 @@ public class Scena extends Stage implements InputProcessor{
 			positionsX.clear();
 			positionsY.clear();
 			gameScreen.setFontCoordinates(TweenX, TweenY);
+			
+			//calculam punctele
+			gameScreen.setPoints( calculatePoints(stivaActori.size()) );
 			
 			GameScreen.drawTween = true;
 			Tweens.tweenPoints(gameScreen.getTweenFont() , TweenX, TweenY + (800-TweenY));
@@ -139,6 +143,16 @@ public class Scena extends Stage implements InputProcessor{
 			temp += pos;
 		}
 		TweenY = temp/positionsY.size;
+	}
+	
+	public int calculatePoints(int stackSize){
+		if(stackSize == 3){
+			return 3;
+		}
+		else if(stackSize > 3){
+			return (stackSize - 3) * 2 + 3 ;
+		}
+		return -1;
 	}
 	
 	public boolean eCuvant(){
