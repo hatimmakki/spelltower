@@ -3,6 +3,12 @@ package com.me.spelltower.model;
 import java.util.Iterator;
 import java.util.Random;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
+import aurelienribon.tweenengine.equations.Bounce;
+import aurelienribon.tweenengine.equations.Elastic;
+
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,16 +21,23 @@ public class Litera extends Actor{
 	private TextureRegion[] textures;
 	private final int WIDTH = 64, HEIGHT = 64;
 	private Color currentColor;
-	private int linie;
-
+	private TweenManager manager;
 	public Litera(String litera, float x, float y, int linie, int coloana){
 
 		this.litera = litera;
 		textures = Assets.getInstance().getRegions(litera);
 		textura = textures[0];
+		textura.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		currentColor = Color.Blue;
+		manager = new TweenManager();
 		setTouchable(Touchable.enabled);
 		setBounds(x, y, 50, 50);
+	}
+	
+	public void draw(Batch batch, float parentAlpha) {
+		batch.draw(textura, getX(), getY(), WIDTH, HEIGHT);
+		
+		manager.update(parentAlpha);
 	}
 
 	@Override
@@ -50,7 +63,7 @@ public class Litera extends Actor{
 			if(Assets.getInstance().eCuvant(scena.cuvant.toString())){
 
 				//In caz pozitiv, schimbam culoarea tuturor literelor cuvantului
-				scena.eCuvant = true;
+				scena.setCuvant(true);
 				while(iter.hasNext()){
 					Litera temp = (Litera)iter.next();
 					temp.setColour(Color.Green);
@@ -58,7 +71,7 @@ public class Litera extends Actor{
 				}
 			}
 			else{
-				scena.eCuvant = false;
+				scena.setCuvant(false);;
 
 				while(iter.hasNext()){
 					((Litera)(iter.next())).setColour(Litera.Color.Yellow);
@@ -67,18 +80,15 @@ public class Litera extends Actor{
 		}
 		return actor;
 	}
-	public int getLinie () {
-		return linie;
-	}
-
+	
 	public void setLinie (int linie) {
-		setY(calculeazaY(linie));
+		
+		Tween.to(this, LiteraAccessor.POSITION_Y, 80f)
+		.target(calculeazaY(linie))
+		.ease(Bounce.OUT)
+		.start(manager);
 	}
 
-	public void draw(Batch batch, float parentAlpha) {
-		batch.draw(textura, getX(), getY(), WIDTH, HEIGHT);
-		
-	}
 
 	public static enum Color{
 		Blue, Yellow, Green;

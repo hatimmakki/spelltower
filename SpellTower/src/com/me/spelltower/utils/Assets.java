@@ -8,15 +8,29 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 
+import aurelienribon.tweenengine.Tween;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.me.spelltower.dictionar.Trie;
+import com.me.spelltower.model.BitmapFont_XY;
+import com.me.spelltower.model.FontAccessor;
 import com.me.spelltower.model.Litera;
-import com.me.spelltower.model.SpellTowerGame;
+import com.me.spelltower.model.LiteraAccessor;
 
 public class Assets {
+
+	//alfabetul
+	public final static String[] alfabet = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q",
+		"r","s","t","u","v","w","x","y","z"};
+
+	public static int[] frecventaCumulativa = {84968,95895,130674,145541,207374,216602,228448,234831,309492,311836,
+		312095,340568,361371,399432,442484,462317,462361,520474,550248,605395,630894,638369,638467,640001,640166,647897};
+
 
 	private static final Assets instance = new Assets();
 	private TextureAtlas atlas ;
@@ -27,18 +41,24 @@ public class Assets {
 	private HashSet<String> hashSet;
 	private Litera matriceLitere[][];
 	private ArrayList<String> alfabetGenerat;
+	private BitmapFont font;
 
 	private Assets(){}
 	public static Assets getInstance(){
 		return instance;
 	}
 
+	//incarcam resursele in memorie
 	public void load(){
 		//load atlas
 		atlas = new TextureAtlas(Gdx.files.internal("data/atlasLitere.atlas"));
 
 		//load dictionary
 		mapper = new ObjectMapper();
+
+		//register tween accessor
+		Tween.registerAccessor(Litera.class, new LiteraAccessor());
+		Tween.registerAccessor(BitmapFont_XY.class, new FontAccessor());
 
 		//genereaza matricea de litere
 		matriceLitere = new Litera[11][7];
@@ -79,32 +99,30 @@ public class Assets {
 	public boolean eCuvant(String cuvant){
 		return hashSet.contains(cuvant);
 	}
-	
+
 	private void genereazaAlfabet(){
 		alfabetGenerat = new ArrayList<String>();
-		int[] frecventaCumulativa = SpellTowerGame.frecventaCumulativa;
-
 
 		for(int i = 0; i<77;i++){
 			int rand = new Random().nextInt(647897);
 
 			int index = Arrays.binarySearch(frecventaCumulativa, rand);
 
-			alfabetGenerat.add(SpellTowerGame.alfabet[Math.abs(index)-1]);
+			alfabetGenerat.add(alfabet[Math.abs(index)-1]);
 
 			Collections.shuffle(alfabetGenerat);
 		}
 	}
 
 	private void genereazaMatricea(){
-		
+
 		int indexAlfabet = 0;
 		int pozCol = 2;
-		
+
 		for(int i = 10; i>= 0; i--){
-			
+
 			int pozLinie = 2;
-			
+
 			for(int j = 0; j <7; j++){
 				Litera t = new Litera(alfabetGenerat.get(indexAlfabet), pozLinie, pozCol, i, j);
 				matriceLitere[i][j] = t;
@@ -114,8 +132,14 @@ public class Assets {
 			pozCol += 67;
 		}
 	}
-	
+
 	public Litera[][] getMatriceLitere () {
 		return matriceLitere;
+	}
+
+	public BitmapFont_XY getFont(){
+		BitmapFont_XY font =  new BitmapFont_XY(Gdx.files.internal("data/consolasWhite.fnt"), 0, 0);
+		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		return font;
 	}
 }

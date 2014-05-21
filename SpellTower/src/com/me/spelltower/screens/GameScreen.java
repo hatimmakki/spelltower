@@ -1,21 +1,18 @@
 package com.me.spelltower.screens;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.me.spelltower.model.BitmapFont_XY;
 import com.me.spelltower.model.Litera;
 import com.me.spelltower.model.Scena;
-import com.me.spelltower.model.SpellTowerGame;
 import com.me.spelltower.utils.Assets;
 
 public class GameScreen implements Screen{
@@ -23,26 +20,40 @@ public class GameScreen implements Screen{
 	private StretchViewport viewPort;
 	private OrthographicCamera camera;
 	private Scena stage;
-	private BitmapFont font;
 	private SpriteBatch batch;
+	private BitmapFont_XY font;
+	private static BitmapFont_XY tweenFont;
 	private FPSLogger logger;
+	private static TweenManager manager;
 	public Litera matriceLitere[][];
+	public static boolean drawTween = false;
 	
-
+	private StringBuilder number = new StringBuilder("");
+	
 	@Override
 	public void render (float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		//logger.log();
 
-		batch.begin();
-		font.draw(batch, stage.cuvant , 50, 790);
-		if(stage.eCuvant){
-			font.draw(batch, " E cuvant!", 100, 790);
-		}
-		batch.end();
+		logger.log();
+		
 		stage.draw();
 		stage.act();
+		
+		batch.begin();
+		font.draw(batch, stage.cuvant.toString().toUpperCase() , 15, 790); 
+		
+		if(stage.eCuvant()){
+			font.setColor(Color.GREEN);
+		}
+		
+		if(drawTween){
+			tweenFont.draw(batch, "+67", tweenFont.getX(), tweenFont.getY());
+		}
+	
+		manager.update(delta);
+		
+		batch.end();
 	}
 
 	@Override
@@ -50,8 +61,14 @@ public class GameScreen implements Screen{
 
 		logger = new FPSLogger();
 		batch = new SpriteBatch();
-		font = new BitmapFont();
-		stage = new Scena();
+		font = Assets.getInstance().getFont();
+		tweenFont = Assets.getInstance().getFont();
+		tweenFont.setColor(Color.GREEN);
+		tweenFont.setX(300);
+		tweenFont.setY(780);
+		
+		manager = new TweenManager();
+		stage = new Scena(this);
 		matriceLitere = Assets.getInstance().getMatriceLitere();
 
 		camera = new OrthographicCamera();
@@ -67,13 +84,31 @@ public class GameScreen implements Screen{
 				stage.addActor(matriceLitere[i][j]);
 			}
 		}
-
 		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
 	public void resize (int width, int height) {
 		stage.getViewport().update(width, height, false);
+	}
+	
+	public void setWhiteFontColor(){
+		font.setColor(Color.WHITE);
+	}
+	
+	public BitmapFont_XY getFont(){
+		return font;
+	}
+	
+	public static TweenManager getTweenManager(){
+		return manager;
+	}
+	public void setFontCoordinates(float x, float y){
+		tweenFont.setX(x);
+		tweenFont.setY(y);
+	}
+	public BitmapFont_XY getTweenFont(){
+		return tweenFont;
 	}
 
 	@Override
