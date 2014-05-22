@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.me.spelltower.screens.GameScreen;
 import com.me.spelltower.utils.Assets;
+import com.me.spelltower.utils.Tweens;
 
 public class Litera extends Actor{
 	private String litera;
@@ -38,10 +40,8 @@ public class Litera extends Actor{
 
 
 		setTouchable(Touchable.enabled);
-		setBounds(x, y, 50, 50);
+		setBounds(x, y, 60, 60);
 	}
-
-
 
 	public void draw(Batch batch, float parentAlpha) {
 		batch.draw(textura, getX(), getY(), WIDTH, HEIGHT);
@@ -54,14 +54,7 @@ public class Litera extends Actor{
 		
 		stage = (Scena)getStage();
 
-/*		if(actor == this)
-			System.out.println("ACTOR HIT LITERA " + litera +"   "+ temp++ );*/
-
 		if(actor != null && actor == this){
-
-
-		/*	System.out.println(Math.abs((actor.getX() - stage.getLastHitActorX())));
-			System.out.println(Math.abs((actor.getY() - stage.getLastHitActorY())));*/
 
 			if(stage.getLastHitActorX() != -1){
 				if( (Math.abs((actor.getX() - stage.getLastHitActorX())) > 134) || (Math.abs((actor.getY() - stage.getLastHitActorY())) > 134) ){
@@ -70,7 +63,6 @@ public class Litera extends Actor{
 			}
 
 			stage.setLastHitActorCoord((int)actor.getX(), (int)actor.getY());
-			
 
 			actor.setTouchable(Touchable.disabled);
 
@@ -108,10 +100,12 @@ public class Litera extends Actor{
 
 	public void setLinie (int linie) {
 
-		Tween.to(this, LiteraAccessor.POSITION_Y, 80f)
+		Tweens.TweenLiteraToY(this, calculeazaY(linie));
+		
+		/*Tween.to(this, LiteraAccessor.POSITION_Y, 80f)
 		.target(calculeazaY(linie))
 		.ease(Bounce.OUT)
-		.start(manager);
+		.start(manager);*/
 	}
 
 	public static enum Color{

@@ -35,8 +35,6 @@ public class GameScreen implements Screen{
 	private int totalPoints = 0;
 	private String totalPointsStr = "0";
 
-	private StringBuilder number = new StringBuilder("");
-
 	@Override
 	public void render (float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -69,7 +67,6 @@ public class GameScreen implements Screen{
 		shapeRend.setColor(Color.ORANGE);
 		shapeRend.line(0, 745, 480, 745);
 		shapeRend.end();
-		
 	}
 
 	@Override

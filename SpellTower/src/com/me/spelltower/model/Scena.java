@@ -3,6 +3,7 @@ package com.me.spelltower.model;
 import java.util.Iterator;
 import java.util.Stack;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,14 +19,14 @@ public class Scena extends Stage implements InputProcessor{
 	private int points;
 	private boolean eCuvant = false;
 	private GameScreen gameScreen;
-	
+
 	private float TweenX, TweenY;
 	private Array<Float> positionsX;
 	private Array<Float> positionsY;
 
 	private  Stack<Actor> stivaActori;
 	public Litera matriceLitere[][];
-	
+
 	private int lastHitActorX = -1;
 	private int lastHitActorY = -1; 
 
@@ -34,9 +35,15 @@ public class Scena extends Stage implements InputProcessor{
 		stivaActori = new Stack<Actor>();
 		cuvant =  new StringBuilder("");
 		matriceLitere = Assets.getInstance().getMatriceLitere();
-		
+
 		positionsX = new Array<Float>();
 		positionsY = new Array<Float>();
+	}
+	
+	@Override
+	public void draw () {
+		gameScreen.getTweenManager().update(Gdx.graphics.getDeltaTime());
+		super.draw();
 	}
 
 	@Override
@@ -44,7 +51,7 @@ public class Scena extends Stage implements InputProcessor{
 
 		//System.out.println("TOUCHUP!");
 		boolean handled =  super.touchUp(screenX, screenY, pointer, button);
-		
+
 		Iterator<Actor> iter = stivaActori.iterator();
 
 		Litera litera = null;
@@ -55,19 +62,19 @@ public class Scena extends Stage implements InputProcessor{
 				litera.remove();
 				addTweenPositions(litera.getX(), litera.getY());
 			}
-			
+
 			//calculam positia pentru interpolare, apoi golim listele
 			calculateTweenPosition();
 			positionsX.clear();
 			positionsY.clear();
 			gameScreen.setFontCoordinates(TweenX, TweenY);
-			
+
 			//calculam punctele
 			gameScreen.setPoints( calculatePoints(stivaActori.size()) );
-			
+
 			GameScreen.drawTween = true;
 			Tweens.tweenPoints(gameScreen.getTweenFont() , TweenX, TweenY + (800-TweenY));
-			
+
 			updateScene();
 		}else{
 			while(iter.hasNext()){
@@ -84,12 +91,6 @@ public class Scena extends Stage implements InputProcessor{
 		resetLastHitActor();
 		return handled;
 	}
-	
-	@Override
-	public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-		System.out.println("STAGE TOUCHDOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		return super.touchDown(screenX, screenY, pointer, button);
-	}
 
 	private void updateScene(){
 
@@ -100,13 +101,10 @@ public class Scena extends Stage implements InputProcessor{
 				if(!matriceLitere[i][j].isTouchable()){
 
 					lin = i;
-
 					for(int k = 1; k <= i; k++){
 
 						Litera litera = matriceLitere[i-k][j];
-
 						if(litera.isTouchable()){
-							//System.out.println("s-a mutat " + litera.getLitera() + " pe linia "+lin);
 							litera.setLinie(lin);
 							lin--;
 						}
@@ -117,34 +115,30 @@ public class Scena extends Stage implements InputProcessor{
 			}
 		}
 	}
-	
-	@Override
-	public Actor hit (float stageX, float stageY, boolean touchable) {
-		return super.hit(stageX, stageY, touchable);
-	}
-	
+
+
 	private void addTweenPositions(float x, float y){
 		positionsX.add(x);
 		positionsY.add(y);
 	}
-	
+
 	private void calculateTweenPosition(){
 		float temp = 0;
-		
+
 		//calculam media x
 		for(Float pos : positionsX){
 			temp += pos;
 		}
 		TweenX = temp/positionsX.size;
 		temp = 0;
-		
+
 		//calculam media y
 		for(Float pos : positionsY){
 			temp += pos;
 		}
 		TweenY = temp/positionsY.size;
 	}
-	
+
 	public int calculatePoints(int stackSize){
 		if(stackSize == 3){
 			return 3;
@@ -154,37 +148,37 @@ public class Scena extends Stage implements InputProcessor{
 		}
 		return -1;
 	}
-	
+
 	public boolean eCuvant(){
 		return eCuvant;
 	}
 	public void setCuvant(boolean var){
 		eCuvant = var;
 	}
-	
+
 	public void pushActor(Litera litera){
 		stivaActori.add(litera);
 	}
 	public Stack<Actor> getStivaActori(){
 		return stivaActori;
 	}
-	
+
 	public void AppendToWord(String string){
 		cuvant.append(string);
 	}
 	public String getCuvant(){
 		return cuvant.toString();
 	}
-	
+
 	public void setLastHitActorCoord(int x, int y){
 		lastHitActorX = x;
 		lastHitActorY = y;
 	}
-	
+
 	public int getLastHitActorX(){
 		return lastHitActorX;
 	}
-	
+
 	public int getLastHitActorY(){
 		return lastHitActorY;
 	}
@@ -192,5 +186,4 @@ public class Scena extends Stage implements InputProcessor{
 		lastHitActorX = -1;
 		lastHitActorY = -1;
 	}
-	
 }
