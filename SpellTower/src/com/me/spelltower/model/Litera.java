@@ -25,9 +25,6 @@ public class Litera extends Actor{
 	private TweenManager manager;
 	private Scena stage;
 
-
-	int temp = 0;
-
 	public Litera(String litera, float x, float y, int linie, int coloana){
 
 		this.litera = litera;
@@ -44,7 +41,7 @@ public class Litera extends Actor{
 	}
 
 	public void draw(Batch batch, float parentAlpha) {
-		batch.draw(textura, getX(), getY(), WIDTH, HEIGHT);
+		batch.draw(textura, getX(), getY(), getOriginX(), getOriginY(), WIDTH, HEIGHT, getScaleX(), getScaleY(), getRotation());
 		manager.update(parentAlpha);
 	}
 

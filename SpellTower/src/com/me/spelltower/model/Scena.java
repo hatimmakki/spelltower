@@ -59,7 +59,9 @@ public class Scena extends Stage implements InputProcessor{
 			while(iter.hasNext()){
 				litera = (Litera)iter.next();
 				litera.setTouchable(Touchable.disabled);
-				litera.remove();
+				
+				Tweens.throwActor(litera);
+				
 				addTweenPositions(litera.getX(), litera.getY());
 			}
 

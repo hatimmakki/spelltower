@@ -59,6 +59,7 @@ public class Assets {
 		//register tween accessor
 		Tween.registerAccessor(Litera.class, new LiteraAccessor());
 		Tween.registerAccessor(BitmapFont_XY.class, new FontAccessor());
+		Tween.setWaypointsLimit(3);
 
 		//genereaza matricea de litere
 		matriceLitere = new Litera[11][7];

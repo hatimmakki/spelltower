@@ -1,5 +1,7 @@
 package com.me.spelltower.utils;
 
+import java.util.Random;
+
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
@@ -16,8 +18,8 @@ public class Tweens {
 
 	public static void tweenPoints(BitmapFont_XY font, float x, float y){
 		Timeline.createParallel()
-		.push(Tween.to(font, FontAccessor.POS_XY, 1.5f).target(x, y))
-		.push(Tween.to(font, FontAccessor.ALPHA, 1.5f).target(0))
+		.push(Tween.to(font, FontAccessor.POS_XY, 5.9f).target(x, y))
+		.push(Tween.to(font, FontAccessor.ALPHA, 5.9f).target(0))
 		.start(GameScreen.getTweenManager())
 		.setCallback(new TweenCallback() {
 			@Override
@@ -27,17 +29,33 @@ public class Tweens {
 		});
 	}
 
-	public static void TweenLiteraToY(Litera litera, float y){
-		Tween.to(litera, LiteraAccessor.POSITION_Y, 2000f)
-		.target(y)
-		.ease(Bounce.OUT)
+	public static void TweenLiteraToY(Litera actor, float y){
+		Tween.to(actor, LiteraAccessor.POS_Y, 2f)
+			.target(y)
+			.ease(Bounce.OUT)
 		.start(GameScreen.getTweenManager());
 	}
 	
-	public static void TweenLiteraFromY(Litera litera, float y){
-		Tween.from(litera, LiteraAccessor.POSITION_Y, 1000f)
-		.target(y)
-		.ease(Bounce.OUT)
-		.start(GameScreen.getTweenManager());
+	public static void throwActor(final Litera actor){
+		
+		int offset = 50;
+		if(new Random().nextBoolean())
+			offset = -50;
+		
+		Timeline.createParallel()
+			.push(Tween.to(actor, LiteraAccessor.ROTATION, 1.5f)
+					.target(360*2.7f))
+					
+			.push(Tween.to(actor, LiteraAccessor.POS_XY, 2.8f)
+				.waypoint(actor.getX(), actor.getY()+200)
+				.target(actor.getX(), -100)
+				.setCallback(new TweenCallback() {
+					
+					@Override
+					public void onEvent (int type, BaseTween<?> source) {
+						actor.remove();
+					}
+				}))
+			.start(GameScreen.getTweenManager());
 	}
 }
