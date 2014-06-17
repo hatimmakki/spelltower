@@ -11,6 +11,7 @@ import java.util.Random;
 import aurelienribon.tweenengine.Tween;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -42,6 +43,7 @@ public class Assets {
 	private Litera matriceLitere[][];
 	private ArrayList<String> alfabetGenerat;
 	private BitmapFont font;
+	private Sound eCuvantSound;
 
 	private Assets(){}
 	public static Assets getInstance(){
@@ -66,6 +68,8 @@ public class Assets {
 		genereazaAlfabet();
 		genereazaMatricea();
 
+		eCuvantSound = Gdx.audio.newSound(Gdx.files.internal("sounds/success.ogg"));
+		
 		InputStream stream = null;
 
 		try{
@@ -142,5 +146,9 @@ public class Assets {
 		BitmapFont_XY font =  new BitmapFont_XY(Gdx.files.internal("data/consolasWhite.fnt"), 0, 0);
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		return font;
+	}
+	
+	public Sound getECuvantSound(){
+		return eCuvantSound;
 	}
 }

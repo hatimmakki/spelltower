@@ -37,7 +37,7 @@ public class Litera extends Actor{
 
 
 		setTouchable(Touchable.enabled);
-		setBounds(x, y, 60, 60);
+		setBounds(x, y, 45, 45);
 	}
 
 	public void draw(Batch batch, float parentAlpha) {

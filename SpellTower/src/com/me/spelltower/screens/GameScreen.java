@@ -44,7 +44,8 @@ public class GameScreen implements Screen{
 
 		stage.draw();
 		stage.act();
-
+		stage.getRoot().getColor().a = 0f;
+		
 		batch.begin();
 		
 		font.draw(batch, stage.getCuvant().toUpperCase() , 15, 790); 

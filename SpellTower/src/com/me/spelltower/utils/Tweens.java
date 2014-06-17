@@ -36,18 +36,19 @@ public class Tweens {
 		.start(GameScreen.getTweenManager());
 	}
 	
-	public static void throwActor(final Litera actor){
+	public static void throwActor( final Litera actor){
 		
 		int offset = 50;
-		if(new Random().nextBoolean())
+		if(new Random().nextBoolean()){
 			offset = -50;
-		
+		}
+			
 		Timeline.createParallel()
-			.push(Tween.to(actor, LiteraAccessor.ROTATION, 1.5f)
-					.target(360*2.7f))
+			.push(Tween.to(actor, LiteraAccessor.ROTATION, 1.0f)
+					.target(360*3.7f))
 					
 			.push(Tween.to(actor, LiteraAccessor.POS_XY, 2.8f)
-				.waypoint(actor.getX(), actor.getY()+200)
+				.waypoint(actor.getX() + offset, actor.getY()+200)
 				.target(actor.getX(), -100)
 				.setCallback(new TweenCallback() {
 					

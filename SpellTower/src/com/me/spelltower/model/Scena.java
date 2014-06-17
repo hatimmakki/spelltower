@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -19,6 +20,7 @@ public class Scena extends Stage implements InputProcessor{
 	private int points;
 	private boolean eCuvant = false;
 	private GameScreen gameScreen;
+	private Sound eCuvantSound;
 
 	private float TweenX, TweenY;
 	private Array<Float> positionsX;
@@ -35,6 +37,7 @@ public class Scena extends Stage implements InputProcessor{
 		stivaActori = new Stack<Actor>();
 		cuvant =  new StringBuilder("");
 		matriceLitere = Assets.getInstance().getMatriceLitere();
+		eCuvantSound = Assets.getInstance().getECuvantSound();
 
 		positionsX = new Array<Float>();
 		positionsY = new Array<Float>();
@@ -76,6 +79,9 @@ public class Scena extends Stage implements InputProcessor{
 
 			GameScreen.drawTween = true;
 			Tweens.tweenPoints(gameScreen.getTweenFont() , TweenX, TweenY + (800-TweenY));
+			
+			//sunetu
+			eCuvantSound.play(0.5f);
 
 			updateScene();
 		}else{

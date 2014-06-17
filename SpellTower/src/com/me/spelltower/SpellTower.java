@@ -2,7 +2,6 @@ package com.me.spelltower;
 
 import com.badlogic.gdx.Game;
 import com.me.spelltower.screens.GameScreen;
-import com.me.spelltower.screens.SplashScreen;
 import com.me.spelltower.utils.Assets;
 
 public class SpellTower extends Game {

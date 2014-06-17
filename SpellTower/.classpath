@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <classpath>
     <classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="assets"/> 
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="output" path="bin"/>
     <classpathentry exported="true" kind="lib" path="C:/Users/me/Desktop/Libraries/jackson-annotations-2.2.3.jar"/>
