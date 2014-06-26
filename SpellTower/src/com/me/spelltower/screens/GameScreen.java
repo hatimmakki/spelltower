@@ -8,9 +8,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.me.spelltower.model.BitmapFont_XY;
 import com.me.spelltower.model.Litera;
@@ -29,6 +34,12 @@ public class GameScreen implements Screen{
 	private static TweenManager manager;
 	private  Litera matriceLitere[][];
 	private ShapeRenderer shapeRend;
+	private Group group;
+	private TextButton continua;
+	private TextButton toMenu;
+	
+	private Sprite playButton;
+	private Sprite pauseButton;
 	
 	public static boolean drawTween = false;
 	private int points;
@@ -59,7 +70,8 @@ public class GameScreen implements Screen{
 			tweenFont.draw(batch, "+" + points, tweenFont.getX(), tweenFont.getY());
 		}
 		
-		manager.update(delta);
+		//playButton.setAlpha(0.5f);
+		//batch.draw(playButton, 220, 750);
 		
 		batch.end();
 		
@@ -68,14 +80,24 @@ public class GameScreen implements Screen{
 		shapeRend.setColor(Color.ORANGE);
 		shapeRend.line(0, 745, 480, 745);
 		shapeRend.end();
+		
+		manager.update(delta);
+		
+		
+		
+		showMenu();
 	}
 
 	@Override
 	public void show () {
 
+		
+		
 		logger = new FPSLogger();
 		batch = new SpriteBatch();
 
+		//playButton = new Sprite(new Texture(Gdx.files.internal("ui/play.png")));
+		//pauseButton = new Sprite(new Texture(Gdx.files.internal("ui/pause.png")));
 
 		font = Assets.getInstance().getFont();
 		tweenFont = Assets.getInstance().getFont();
@@ -104,6 +126,8 @@ public class GameScreen implements Screen{
 		}
 		
 		Gdx.input.setInputProcessor(stage);
+		
+		stage.unfocusAll();
 	}
 
 	@Override
@@ -134,6 +158,24 @@ public class GameScreen implements Screen{
 		this.points = points;
 		totalPoints += points;
 		totalPointsStr = totalPoints + "";
+	}
+	
+	public void showMenu(){
+		continua = new TextButton("CONTINUA", Assets.getInstance().getButtonStyle());
+		continua.setPosition(100, 400);
+		toMenu = new TextButton("MENIU", Assets.getInstance().getButtonStyle());
+		group = new Group();
+		group.setSize(100, 100);
+		group.addActor(continua);
+		group.addActor(toMenu);
+		group.setPosition(100, 400);
+		
+		Table table = new Table();
+		table.add(continua);
+		table.setPosition(100, 400);
+		//stage.addActor(table);
+		
+		//stage.addActor(continua);
 	}
 
 	@Override

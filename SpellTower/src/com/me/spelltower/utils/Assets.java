@@ -11,11 +11,14 @@ import java.util.Random;
 import aurelienribon.tweenengine.Tween;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.me.spelltower.dictionar.Trie;
 import com.me.spelltower.model.BitmapFont_XY;
@@ -29,9 +32,17 @@ public class Assets {
 	public final static String[] alfabet = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q",
 		"r","s","t","u","v","w","x","y","z"};
 
+	/**
+	 * Frecventa cumulativa precalculata a literelor din alfabetul Limbii Române, pentru a genera o matrice aleatoare a acestora
+	 * cu frecvente balansate.
+	 */
 	public static int[] frecventaCumulativa = {84968,95895,130674,145541,207374,216602,228448,234831,309492,311836,
 		312095,340568,361371,399432,442484,462317,462361,520474,550248,605395,630894,638369,638467,640001,640166,647897};
-
+	
+	//Lista de scoruri maxime
+	ArrayList<Integer> scoresList;
+	
+	AssetManager manager = new AssetManager();
 
 	private static final Assets instance = new Assets();
 	private TextureAtlas atlas ;
@@ -42,9 +53,16 @@ public class Assets {
 	private HashSet<String> hashSet;
 	private Litera matriceLitere[][];
 	private ArrayList<String> alfabetGenerat;
-	private BitmapFont font;
+	private BitmapFont fontShadow;
 	private Sound eCuvantSound;
-
+	
+	//ui
+	private TextButtonStyle buttonStyle;
+	private Skin skin;
+	private TextureAtlas atlasButoane;
+	private BitmapFont font;
+	private BitmapFont fontWhite;
+	
 	private Assets(){}
 	public static Assets getInstance(){
 		return instance;
@@ -52,6 +70,16 @@ public class Assets {
 
 	//incarcam resursele in memorie
 	public void load(){
+		
+		//lista de scoruri
+		scoresList = new ArrayList<Integer>();
+		scoresList.add(65);
+		scoresList.add(654);
+		scoresList.add(21);
+		scoresList.add(86);
+		scoresList.add(36);
+		Collections.sort(scoresList);
+		
 		//load atlas
 		atlas = new TextureAtlas(Gdx.files.internal("data/atlasLitere.atlas"));
 
@@ -67,6 +95,19 @@ public class Assets {
 		matriceLitere = new Litera[11][7];
 		genereazaAlfabet();
 		genereazaMatricea();
+		
+		//butoane
+		atlasButoane = new TextureAtlas(Gdx.files.internal("ui/buttons.pack"));
+		skin = new Skin(atlasButoane);
+		fontShadow = new BitmapFont(Gdx.files.internal("ui/fontShadow.fnt"));
+		font = new BitmapFont(Gdx.files.internal("ui/font.fnt"));
+		fontWhite = new BitmapFont(Gdx.files.internal("ui/fontWhite.fnt"));
+		
+		buttonStyle = new TextButtonStyle(skin.getDrawable("button1"),
+												    skin.getDrawable("button2"),
+													 skin.getDrawable("button1"), 
+													 fontShadow);
+		
 
 		eCuvantSound = Gdx.audio.newSound(Gdx.files.internal("sounds/success.ogg"));
 		
@@ -150,5 +191,20 @@ public class Assets {
 	
 	public Sound getECuvantSound(){
 		return eCuvantSound;
+	}
+	public  TextButtonStyle getButtonStyle(){
+		return buttonStyle;
+	}
+	public ArrayList<Integer> getListaScoruri(){
+		return scoresList;
+	}
+	public BitmapFont getUIFontShadow(){
+		return fontShadow;
+	}
+	public BitmapFont getUIFont(){
+		return font;
+	}
+	public BitmapFont getUIFontWhite(){
+		return fontWhite;
 	}
 }
