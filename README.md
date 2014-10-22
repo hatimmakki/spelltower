@@ -3,7 +3,9 @@ spelltower
 
 The SpellTower game in romanian, made using Libgdx 0.9, works only on Android, tested only on my Nexus S.
 
-gif of gameplay https://gfycat.com/DenseGenerousHare
+gif of gameplay <a href="https://gfycat.com/DenseGenerousHare">gfy</a> <a href="http://imgur.com/5bGkoMW">alternative</a>
+Runs laggy because it was recorded on an emulator, looks smoother on a real phone.
+
 
 To build : Eclipse -> Import Existing Project
 
